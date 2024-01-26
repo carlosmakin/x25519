@@ -68,4 +68,4 @@ Uint8List sharedSecret = X25519.computeSharedSecret(bobPrivateKey, alicePublicKe
 
 ## Contribution
 
-Your contributions to enhance this X25519 implementation are highly appreciated. Feel free to report issues, suggest improvements, or submit pull requests. Let's work together to maintain and improve this cryptographic tool.
+Contributions to improve the implementation, enhance security, and extend functionality are welcome. If you find any issues or have suggestions, please feel free to open an issue or submit a pull request.
