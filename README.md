@@ -2,7 +2,7 @@
 
 ### Overview
 
-This Dart repository implements the X25519 key exchange algorithm as outlined in [RFC 7748](https://www.rfc-editor.org/rfc/rfc7748). X25519 is a state-of-the-art method for secure key exchange, enabling two parties to establish a shared secret over an insecure channel.
+This Dart repository implements the X25519 key exchange algorithm as outlined in [RFC 7748](https://www.rfc-editor.org/rfc/rfc7748). X25519 is an emerging, highly efficient key exchange method, increasingly gaining popularity for securely establishing shared secrets over insecure channels.
 
 ### X25519
 
