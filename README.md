@@ -6,7 +6,7 @@ This Dart repository implements the X25519 key exchange algorithm as outlined in
 
 ### X25519
 
-X25519 uses elliptic curve cryptography for key agreement and is known for its high security and performance. It is a default choice in various cryptographic protocols, including Transport Layer Security (TLS) and Internet Protocol Security (IPsec).
+X25519 uses elliptic curve cryptography for key agreement and is known for its high security and performance. It is highly recommended and widely adopted for key exchange in modern cryptographic protocols. It's a preferred choice in TLS 1.3 and is supported in many IPsec implementations.
 
 #### Key Features:
 - **Strong Security**: Resistant to many known types of cryptographic attacks.
