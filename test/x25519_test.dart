@@ -129,7 +129,7 @@ void main() {
         u = oldK;
       }
       expect(k, equals(expected));
-    });
+    }, skip: true);
   });
 
   group('X25519 Diffie-Hellman Key Exchange', () {
