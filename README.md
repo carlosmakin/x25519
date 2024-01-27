@@ -1,4 +1,4 @@
-## X25519 Dart Implementation 🔐
+## X25519 🔐
 
 ### Overview
 
