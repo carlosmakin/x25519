@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:x25519/src/x25519.dart';
 
 /// Provides X25519 key generation and shared secret computation functions.
-abstract final base class X25519 {
+abstract class X25519 {
   /// Generates a 32-byte private key for X25519 key exchange.
   /// The key is formatted as per X25519 specifications.
   static Uint8List generatePrivateKey() {
