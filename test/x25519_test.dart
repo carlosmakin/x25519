@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:x25519/src/x25519.dart';
-import 'package:x25519/src/x25519_ecdh.dart';
 import 'utilities/hex.dart';
 import 'package:test/test.dart';
 

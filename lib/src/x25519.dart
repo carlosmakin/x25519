@@ -1,22 +1,62 @@
+import 'dart:math';
 import 'dart:typed_data';
+
+/// Provides X25519 key generation and shared secret computation functions.
+abstract class X25519 {
+  /// Generates a 32-byte private key for X25519 key exchange.
+  /// The key is formatted as per X25519 specifications.
+  static Uint8List generatePrivateKey() {
+    final Random random = Random.secure();
+    final Uint8List privateKey = Uint8List(32);
+    for (int i = 0; i < 32; i++) {
+      privateKey[i] = random.nextInt(256);
+    }
+    return _clamp(privateKey);
+  }
+
+  /// Derives a 32-byte public key from the given X25519 private key.
+  static Uint8List generatePublicKey(Uint8List privateKey) {
+    final Uint8List basePoint = Uint8List.fromList(<int>[9] + List<int>.filled(31, 0));
+    return x25519(privateKey, basePoint);
+  }
+
+  /// Computes the shared secret using the user's private key and another party's public key.
+  static Uint8List computeSharedSecret(Uint8List privateKey, Uint8List publicKey) {
+    return x25519(privateKey, publicKey);
+  }
+
+  /// Checks if the given private key is valid for X25519.
+  static bool isValidPrivateKey(Uint8List privateKey) {
+    if (privateKey.length != 32) return false;
+    if ((privateKey[0] & 0x07) != 0) return false;
+    if ((privateKey[31] & 0x80) != 0) return false;
+    if ((privateKey[31] & 0x40) == 0) return false;
+    return true;
+  }
+
+  /// Checks if the given public key is valid for X25519.
+  static bool isValidPublicKey(Uint8List publicKey) {
+    return publicKey.length == 32;
+  }
+}
 
 final BigInt p = (BigInt.one << 255) - BigInt.from(19);
 final BigInt a24 = BigInt.from(121665);
 const int bits = 255;
 
-BigInt mask(BigInt swap) {
+BigInt _mask(BigInt swap) {
   return BigInt.zero - swap;
 }
 
 ({BigInt x2, BigInt x3}) cswap(BigInt swap, BigInt x2, BigInt x3) {
-  BigInt m = mask(swap);
+  BigInt m = _mask(swap);
   BigInt dummy = m & (x2 ^ x3);
   x2 = x2 ^ dummy;
   x3 = x3 ^ dummy;
   return (x2: x2, x3: x3);
 }
 
-BigInt montgomeryLadder(BigInt k, BigInt u) {
+BigInt _montgomeryLadder(BigInt k, BigInt u) {
   BigInt x1 = u;
   BigInt x2 = BigInt.one;
   BigInt z2 = BigInt.zero;
@@ -105,7 +145,7 @@ BigInt decodeUCoordinate(Uint8List u) {
   return decodeLittleEndian(u);
 }
 
-Uint8List encodeUCoordinate(BigInt u) {
+Uint8List _encodeUCoordinate(BigInt u) {
   if (u.isNegative || u >= p) throw ArgumentError('u-coordinate must be within the field range');
 
   final Uint8List result = Uint8List(32);
@@ -117,7 +157,7 @@ Uint8List encodeUCoordinate(BigInt u) {
   return result;
 }
 
-BigInt decodeScalar25519(Uint8List k) {
+BigInt _decodeScalar25519(Uint8List k) {
   if (k.length != 32) throw ArgumentError('Scalar must be 32 bytes for X25519');
 
   final Uint8List kList = Uint8List.fromList(k);
@@ -130,7 +170,7 @@ BigInt decodeScalar25519(Uint8List k) {
   return decodeLittleEndian(kList);
 }
 
-Uint8List clamp(Uint8List r) {
+Uint8List _clamp(Uint8List r) {
   if (r.length != 32) throw ArgumentError('Input must be 32 bytes for clamping');
 
   r[0] &= 248;
@@ -143,9 +183,9 @@ Uint8List x25519(Uint8List k, Uint8List u) {
   if (k.length != 32) throw ArgumentError('Scalar k must be 32 bytes');
   if (u.length != 32) throw ArgumentError('u-coordinate must be 32 bytes');
 
-  final BigInt scalar = decodeScalar25519(k);
+  final BigInt scalar = _decodeScalar25519(k);
   final BigInt uCoordinate = decodeUCoordinate(u);
-  final BigInt resultUCoordinate = montgomeryLadder(scalar, uCoordinate);
+  final BigInt resultUCoordinate = _montgomeryLadder(scalar, uCoordinate);
 
-  return encodeUCoordinate(resultUCoordinate);
+  return _encodeUCoordinate(resultUCoordinate);
 }

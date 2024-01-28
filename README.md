@@ -33,7 +33,7 @@ RFC 7748 serves as a comprehensive guide for the X25519 algorithm, detailing its
 
 ```dart
 import 'dart:typed_data';
-import 'package:x25519_dart/x25519.dart';
+import 'package:x25519/x25519.dart';
 
 Uint8List alicePrivateKey = X25519.generatePrivateKey();
 Uint8List alicePublicKey = X25519.generatePublicKey(alicePrivateKey);
@@ -53,7 +53,7 @@ Uint8List bobSharedSecret = X25519.computeSharedSecret(bobPrivateKey, alicePubli
 
 ```dart
 import 'dart:typed_data';
-import 'package:x25519_dart/x25519.dart';
+import 'package:x25519/x25519.dart';
 
 // Alice generates her keys
 Uint8List alicePrivateKey = X25519.generatePrivateKey();
