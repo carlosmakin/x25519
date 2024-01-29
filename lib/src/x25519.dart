@@ -1,7 +1,11 @@
 import 'dart:math';
 import 'dart:typed_data';
 
-/// Provides X25519 key generation and shared secret computation functions.
+/// X25519 Key Agreement Scheme (RFC 7748).
+///
+/// This class implements an asymmetric elliptic curve Diffie-Hellman (ECDH) key exchange using 256-bit keys.
+/// X25519 is designed for establishing secure communication channels by enabling the generation and management
+/// of private and public keys, crucial for computing shared secrets in cryptographic protocols.
 abstract class X25519 {
   /// Generates a 32-byte private key for X25519 key exchange.
   /// The key is formatted as per X25519 specifications.
