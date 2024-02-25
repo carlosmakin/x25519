@@ -1,14 +1,14 @@
 name: x25519
 description: An implementation of the asymmetric X25519 elliptic curve Diffie-Hellman (ECDH) key exchange scheme. (RFC 7748)
-version: 1.0.0
+version: 1.0.1
 repository: https://github.com/carlosmakin/x25519
 
 environment:
-  sdk: ^3.2.5
+  sdk: ^3.3.0
 
 dependencies:
   # path: ^1.8.0
 
 dev_dependencies:
   lints: ^3.0.0
-  test: ^1.25.0
+  test: ^1.25.2
