@@ -60,7 +60,6 @@ void main() {
           hexToBytes('7c3911e0ab2586fd864497297e575e6f3bc601c0883c30df5f4dd2d24f665424');
 
       for (int i = 0; i < 1000000; i++) {
-        if (i % 10000 == 0) print(i);
         Uint8List oldK = Uint8List.fromList(k);
         k = x25519(k, u);
         u = oldK;
