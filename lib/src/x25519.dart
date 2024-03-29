@@ -46,88 +46,68 @@ abstract class X25519 {
 
 final BigInt p = (BigInt.one << 255) - BigInt.from(19);
 final BigInt a24 = BigInt.from(121665);
-const int bits = 255;
-
-BigInt _mask(BigInt swap) {
-  return BigInt.zero - swap;
-}
-
-({BigInt x2, BigInt x3}) cswap(BigInt swap, BigInt x2, BigInt x3) {
-  BigInt m = _mask(swap);
-  BigInt dummy = m & (x2 ^ x3);
-  x2 = x2 ^ dummy;
-  x3 = x3 ^ dummy;
-  return (x2: x2, x3: x3);
-}
 
 BigInt _montgomeryLadder(BigInt k, BigInt u) {
-  BigInt x1 = u;
+  final BigInt x1 = u;
+
   BigInt x2 = BigInt.one;
   BigInt z2 = BigInt.zero;
   BigInt x3 = u;
   BigInt z3 = BigInt.one;
   BigInt swap = BigInt.zero;
 
-  for (int t = bits - 1; t >= 0; t--) {
-    BigInt kt = (k >> t) & BigInt.one;
+  BigInt a, aa, b, bb, e, c, d, da, cb;
+  BigInt dummy, m;
+
+  for (int t = 255 - 1; t >= 0; t--) {
+    final BigInt kt = (k >> t) & BigInt.one;
     swap ^= kt;
 
-    ({BigInt x2, BigInt x3}) rx = cswap(swap, x2, x3);
-    x2 = rx.x2;
-    x3 = rx.x3;
-    ({BigInt x2, BigInt x3}) rz = cswap(swap, z2, z3);
-    z2 = rz.x2;
-    z3 = rz.x3;
+    m = BigInt.zero - swap;
+
+    dummy = m & (x2 ^ x3);
+    x2 = x2 ^ dummy;
+    x3 = x3 ^ dummy;
+
+    dummy = m & (z2 ^ z3);
+    z2 = z2 ^ dummy;
+    z3 = z3 ^ dummy;
+
     swap = kt;
 
-    BigInt a = (x2 + z2);
-    a %= p;
-    BigInt aa = (a * a);
-    aa %= p;
-    BigInt b = (x2 - z2);
-    b %= p;
-    BigInt bb = (b * b);
-    bb %= p;
-    BigInt e = (aa - bb);
-    e %= p;
-    BigInt c = (x3 + z3);
-    c %= p;
-    BigInt d = (x3 - z3);
-    d %= p;
-    BigInt da = (d * a);
-    da %= p;
-    BigInt cb = (c * b);
-    cb %= p;
+    a = (x2 + z2) % p;
+    aa = (a * a) % p;
+    b = (x2 - z2) % p;
+    bb = (b * b) % p;
+    e = (aa - bb) % p;
+    c = (x3 + z3) % p;
+    d = (x3 - z3) % p;
+    da = (d * a) % p;
+    cb = (c * b) % p;
 
-    x3 = (da + cb);
-    x3 %= p;
-    x3 = x3 * x3;
-    x3 %= p;
+    x3 = (da + cb) % p;
+    x3 = (x3 * x3) % p;
 
-    z3 = (da - cb);
-    z3 %= p;
-    z3 = z3 * z3;
-    z3 %= p;
-    z3 = z3 * x1;
-    z3 %= p;
+    z3 = (da - cb) % p;
+    z3 = (z3 * z3) % p;
+    z3 = (z3 * x1) % p;
 
-    x2 = (aa * bb);
-    x2 %= p;
+    x2 = (aa * bb) % p;
 
-    z2 = (a24 * e);
-    z2 %= p;
-    z2 = (aa + z2);
-    z2 %= p;
-    z2 = (e * z2);
-    z2 %= p;
+    z2 = (a24 * e) % p;
+    z2 = (aa + z2) % p;
+    z2 = (e * z2) % p;
   }
 
-  ({BigInt x2, BigInt x3}) rx2 = cswap(swap, x2, x3);
-  x2 = rx2.x2;
-  x3 = rx2.x3;
-  ({BigInt x2, BigInt x3}) rz2 = cswap(swap, z2, z3);
-  z2 = rz2.x2;
-  z3 = rz2.x3;
+  m = BigInt.zero - swap;
+
+  dummy = m & (x2 ^ x3);
+  x2 = x2 ^ dummy;
+  x3 = x3 ^ dummy;
+
+  dummy = m & (z2 ^ z3);
+  z2 = z2 ^ dummy;
+  z3 = z3 ^ dummy;
 
   return (x2 * (z2.modPow(p - BigInt.two, p))) % p;
 }
