@@ -85,18 +85,10 @@ BigInt _montgomeryLadder(BigInt k, BigInt u) {
     da = (d * a) % p;
     cb = (c * b) % p;
 
-    x3 = (da + cb) % p;
-    x3 = (x3 * x3) % p;
-
-    z3 = (da - cb) % p;
-    z3 = (z3 * z3) % p;
-    z3 = (z3 * x1) % p;
-
+    x3 = ((da + cb) * (da + cb)) % p;
+    z3 = (((da - cb) * (da - cb)) * x1) % p;
     x2 = (aa * bb) % p;
-
-    z2 = (a24 * e) % p;
-    z2 = (aa + z2) % p;
-    z2 = (e * z2) % p;
+    z2 = (e * (aa + (a24 * e))) % p;
   }
 
   m = BigInt.zero - swap;
