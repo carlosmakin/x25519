@@ -20,7 +20,7 @@ abstract class X25519 {
 
   /// Derives a 32-byte public key from the given X25519 private key.
   static Uint8List generatePublicKey(Uint8List privateKey) {
-    final Uint8List basePoint = Uint8List.fromList(<int>[9] + List<int>.filled(31, 0));
+    final Uint8List basePoint = Uint8List(32)..[0] = 9;
     return x25519(privateKey, basePoint);
   }
 
