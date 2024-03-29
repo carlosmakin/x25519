@@ -100,14 +100,8 @@ BigInt _montgomeryLadder(BigInt k, BigInt u) {
   }
 
   m = BigInt.zero - swap;
-
-  dummy = m & (x2 ^ x3);
-  x2 = x2 ^ dummy;
-  x3 = x3 ^ dummy;
-
-  dummy = m & (z2 ^ z3);
-  z2 = z2 ^ dummy;
-  z3 = z3 ^ dummy;
+  x2 = x2 ^ (m & (x2 ^ x3));
+  z2 = z2 ^ (m & (z2 ^ z3));
 
   return (x2 * (z2.modPow(p - BigInt.two, p))) % p;
 }
